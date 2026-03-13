@@ -49,7 +49,9 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
     username,
     totalCommits: contributionsCollection.totalCommitContributions,
     totalPRs: pullRequests.totalCount,
+    totalMergedPRs: user.mergedPullRequests.totalCount,
     totalIssues: issues.totalCount,
+    totalClosedIssues: user.closedIssues.totalCount,
     totalReviews: contributionsCollection.totalPullRequestReviewContributions,
     totalContributions: contributionsCollection.contributionCalendar.totalContributions,
     repositoryCount: repositories.totalCount,
@@ -57,6 +59,15 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
     totalForks,
     location,
     commitTimes,
+    latestIssues: user.latestIssues.nodes.map((node) => ({
+      createdAt: node.createdAt,
+      closedAt: node.closedAt,
+    })),
+    contributedRepos: user.repositoriesContributedTo.nodes.map((node) => ({
+      isFork: node.isFork,
+      owner: node.owner.login,
+      collaboratorCount: node.collaborators.totalCount,
+    })),
     languages: languageMap,
     repositories: normalizedRepos,
   };

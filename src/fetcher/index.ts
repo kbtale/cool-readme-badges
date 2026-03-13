@@ -29,8 +29,31 @@ export const USER_DATA_QUERY = gql`
       pullRequests(first: 1) {
         totalCount
       }
+      mergedPullRequests: pullRequests(states: MERGED) {
+        totalCount
+      }
       issues(first: 1) {
         totalCount
+      }
+      closedIssues: issues(states: CLOSED) {
+        totalCount
+      }
+      latestIssues: issues(first: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
+        nodes {
+          createdAt
+          closedAt
+        }
+      }
+      repositoriesContributedTo(first: 50, contributionTypes: [COMMIT, PULL_REQUEST, REPOSITORY, PULL_REQUEST_REVIEW]) {
+        nodes {
+          isFork
+          owner {
+            login
+          }
+          collaborators {
+            totalCount
+          }
+        }
       }
       repositories(first: 100, ownerAffiliations: OWNER, isFork: false, orderBy: {field: STARGAZERS, direction: DESC}) {
         totalCount
