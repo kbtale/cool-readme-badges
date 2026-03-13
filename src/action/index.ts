@@ -1,5 +1,5 @@
-import { fetchUserData } from '../fetcher/index.js';
-import { calculateBadges } from '../calculators/index.js';
+import { fetchUserData, parseGithubData } from '../fetcher/index.js';
+import { calculateTemporalBadges } from '../calculators/index.js';
 import { renderSvg } from '../renderer/index.js';
 
 async function run() {

@@ -1,10 +1,15 @@
 import { gql, GraphQLClient } from 'graphql-request';
+import type { RawGithubResponse } from './types.js';
+
+export * from './types.js';
+export * from './parseGithubData.js';
 
 const endpoint = 'https://api.github.com/graphql';
 
 export const USER_DATA_QUERY = gql`
   query GetUserData($login: String!) {
     user(login: $login) {
+      location
       contributionsCollection {
         totalCommitContributions
         totalIssueContributions
@@ -12,6 +17,13 @@ export const USER_DATA_QUERY = gql`
         totalPullRequestReviewContributions
         contributionCalendar {
           totalContributions
+        }
+        commitContributionsByRepository {
+          contributions(first: 100) {
+            nodes {
+              occurredAt
+            }
+          }
         }
       }
       pullRequests(first: 1) {
@@ -41,7 +53,7 @@ export const USER_DATA_QUERY = gql`
   }
 `;
 
-export const fetchUserData = async (token: string, username: string) => {
+export const fetchUserData = async (token: string, username: string): Promise<RawGithubResponse> => {
   const client = new GraphQLClient(endpoint, {
     headers: {
       authorization: `Bearer ${token}`,
@@ -49,7 +61,7 @@ export const fetchUserData = async (token: string, username: string) => {
   });
 
   try {
-    const data = await client.request(USER_DATA_QUERY, { login: username });
+    const data = await client.request<RawGithubResponse>(USER_DATA_QUERY, { login: username });
     return data;
   } catch (error) {
     console.error('Error fetching user data from GitHub API:', error);
