@@ -9,6 +9,12 @@ const endpoint = 'https://api.github.com/graphql';
 export const USER_DATA_QUERY = gql`
   query GetUserData($login: String!) {
     user(login: $login) {
+      followers {
+        totalCount
+      }
+      following {
+        totalCount
+      }
       location
       contributionsCollection {
         totalCommitContributions

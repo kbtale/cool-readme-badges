@@ -15,6 +15,10 @@ export interface RepositoryStats {
   forks: number;
   diskUsage: number;
   primaryLanguage: string | null;
+  createdAt: string;
+  isArchived: boolean;
+  totalCommits: number;
+  collaboratorCount: number;
   languages: LanguageStats[];
 }
 
@@ -30,6 +34,8 @@ export interface DeveloperProfile {
   repositoryCount: number;
   totalStars: number;
   totalForks: number;
+  followers: number;
+  following: number;
   location: string | null;
   commitTimes: string[];
   latestIssues: { createdAt: string; closedAt: string | null }[];
@@ -40,6 +46,8 @@ export interface DeveloperProfile {
 
 export interface RawGithubResponse {
   user: {
+    followers: { totalCount: number };
+    following: { totalCount: number };
     location: string | null;
     contributionsCollection: {
       totalCommitContributions: number;
@@ -95,6 +103,18 @@ export interface RawGithubResponse {
         diskUsage: number;
         primaryLanguage: {
           name: string;
+        } | null;
+        createdAt: string;
+        isArchived: boolean;
+        collaborators: {
+          totalCount: number;
+        };
+        defaultBranchRef: {
+          target: {
+            history?: {
+              totalCount: number;
+            };
+          };
         } | null;
         languages: {
           edges: Array<{
