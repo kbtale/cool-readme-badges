@@ -26,12 +26,15 @@ export interface DeveloperProfile {
   repositoryCount: number;
   totalStars: number;
   totalForks: number;
+  location: string | null;
+  commitTimes: string[];
   languages: Record<string, { size: number; color: string }>;
   repositories: RepositoryStats[];
 }
 
 export interface RawGithubResponse {
   user: {
+    location: string | null;
     contributionsCollection: {
       totalCommitContributions: number;
       totalIssueContributions: number;
@@ -40,6 +43,13 @@ export interface RawGithubResponse {
       contributionCalendar: {
         totalContributions: number;
       };
+      commitContributionsByRepository: Array<{
+        contributions: {
+          nodes: Array<{
+            occurredAt: string;
+          }>;
+        };
+      }>;
     };
     pullRequests: {
       totalCount: number;

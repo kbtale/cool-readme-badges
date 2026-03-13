@@ -2,7 +2,11 @@ import type { RawGithubResponse, DeveloperProfile, RepositoryStats, LanguageStat
 
 export function parseGithubData(username: string, rawData: RawGithubResponse): DeveloperProfile {
   const { user } = rawData;
-  const { contributionsCollection, pullRequests, issues, repositories } = user;
+  const { location, contributionsCollection, pullRequests, issues, repositories } = user;
+
+  const commitTimes: string[] = contributionsCollection.commitContributionsByRepository.flatMap(
+    (repo) => repo.contributions.nodes.map((node) => node.occurredAt)
+  );
 
   const normalizedRepos: RepositoryStats[] = repositories.nodes.map((repo) => {
     const langs: LanguageStats[] = repo.languages.edges.map((edge) => ({
@@ -49,6 +53,8 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
     repositoryCount: repositories.totalCount,
     totalStars,
     totalForks,
+    location,
+    commitTimes,
     languages: languageMap,
     repositories: normalizedRepos,
   };

@@ -9,6 +9,7 @@ const endpoint = 'https://api.github.com/graphql';
 export const USER_DATA_QUERY = gql`
   query GetUserData($login: String!) {
     user(login: $login) {
+      location
       contributionsCollection {
         totalCommitContributions
         totalIssueContributions
@@ -16,6 +17,13 @@ export const USER_DATA_QUERY = gql`
         totalPullRequestReviewContributions
         contributionCalendar {
           totalContributions
+        }
+        commitContributionsByRepository {
+          contributions(first: 100) {
+            nodes {
+              occurredAt
+            }
+          }
         }
       }
       pullRequests(first: 1) {
