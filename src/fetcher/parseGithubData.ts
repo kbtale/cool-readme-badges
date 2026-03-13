@@ -19,6 +19,8 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
       name: repo.name,
       stars: repo.stargazerCount,
       forks: repo.forkCount,
+      diskUsage: repo.diskUsage,
+      primaryLanguage: repo.primaryLanguage?.name || null,
       languages: langs,
     };
   });

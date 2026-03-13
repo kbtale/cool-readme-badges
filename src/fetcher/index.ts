@@ -38,6 +38,10 @@ export const USER_DATA_QUERY = gql`
           name
           stargazerCount
           forkCount
+          diskUsage
+          primaryLanguage {
+            name
+          }
           languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
             edges {
               size

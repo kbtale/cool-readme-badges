@@ -13,6 +13,8 @@ export interface RepositoryStats {
   name: string;
   stars: number;
   forks: number;
+  diskUsage: number;
+  primaryLanguage: string | null;
   languages: LanguageStats[];
 }
 
@@ -63,6 +65,10 @@ export interface RawGithubResponse {
         name: string;
         stargazerCount: number;
         forkCount: number;
+        diskUsage: number;
+        primaryLanguage: {
+          name: string;
+        } | null;
         languages: {
           edges: Array<{
             size: number;
