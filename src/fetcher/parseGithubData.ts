@@ -2,7 +2,7 @@ import type { RawGithubResponse, DeveloperProfile, RepositoryStats, LanguageStat
 
 export function parseGithubData(username: string, rawData: RawGithubResponse): DeveloperProfile {
   const { user } = rawData;
-  const { location, contributionsCollection, pullRequests, issues, repositories } = user;
+  const { location, followers, following, contributionsCollection, pullRequests, issues, repositories } = user;
 
   const commitTimes: string[] = contributionsCollection.commitContributionsByRepository.flatMap(
     (repo) => repo.contributions.nodes.map((node) => node.occurredAt)
@@ -19,6 +19,12 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
       name: repo.name,
       stars: repo.stargazerCount,
       forks: repo.forkCount,
+      diskUsage: repo.diskUsage,
+      primaryLanguage: repo.primaryLanguage?.name || null,
+      createdAt: repo.createdAt,
+      isArchived: repo.isArchived,
+      totalCommits: repo.defaultBranchRef?.target.history?.totalCount || 0,
+      collaboratorCount: repo.collaborators.totalCount,
       languages: langs,
     };
   });
@@ -47,14 +53,27 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
     username,
     totalCommits: contributionsCollection.totalCommitContributions,
     totalPRs: pullRequests.totalCount,
+    totalMergedPRs: user.mergedPullRequests.totalCount,
     totalIssues: issues.totalCount,
+    totalClosedIssues: user.closedIssues.totalCount,
     totalReviews: contributionsCollection.totalPullRequestReviewContributions,
     totalContributions: contributionsCollection.contributionCalendar.totalContributions,
     repositoryCount: repositories.totalCount,
     totalStars,
     totalForks,
+    followers: followers.totalCount,
+    following: following.totalCount,
     location,
     commitTimes,
+    latestIssues: user.latestIssues.nodes.map((node) => ({
+      createdAt: node.createdAt,
+      closedAt: node.closedAt,
+    })),
+    contributedRepos: user.repositoriesContributedTo.nodes.map((node) => ({
+      isFork: node.isFork,
+      owner: node.owner.login,
+      collaboratorCount: node.collaborators.totalCount,
+    })),
     languages: languageMap,
     repositories: normalizedRepos,
   };

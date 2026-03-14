@@ -9,6 +9,12 @@ const endpoint = 'https://api.github.com/graphql';
 export const USER_DATA_QUERY = gql`
   query GetUserData($login: String!) {
     user(login: $login) {
+      followers {
+        totalCount
+      }
+      following {
+        totalCount
+      }
       location
       contributionsCollection {
         totalCommitContributions
@@ -29,8 +35,31 @@ export const USER_DATA_QUERY = gql`
       pullRequests(first: 1) {
         totalCount
       }
+      mergedPullRequests: pullRequests(states: MERGED) {
+        totalCount
+      }
       issues(first: 1) {
         totalCount
+      }
+      closedIssues: issues(states: CLOSED) {
+        totalCount
+      }
+      latestIssues: issues(first: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
+        nodes {
+          createdAt
+          closedAt
+        }
+      }
+      repositoriesContributedTo(first: 50, contributionTypes: [COMMIT, PULL_REQUEST, REPOSITORY, PULL_REQUEST_REVIEW]) {
+        nodes {
+          isFork
+          owner {
+            login
+          }
+          collaborators {
+            totalCount
+          }
+        }
       }
       repositories(first: 100, ownerAffiliations: OWNER, isFork: false, orderBy: {field: STARGAZERS, direction: DESC}) {
         totalCount
@@ -38,6 +67,10 @@ export const USER_DATA_QUERY = gql`
           name
           stargazerCount
           forkCount
+          diskUsage
+          primaryLanguage {
+            name
+          }
           languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
             edges {
               size
