@@ -23,6 +23,13 @@ export const USER_DATA_QUERY = gql`
         totalPullRequestReviewContributions
         contributionCalendar {
           totalContributions
+          weeks {
+            contributionDays {
+              contributionCount
+              weekday
+              date
+            }
+          }
         }
         commitContributionsByRepository {
           contributions(first: 100) {

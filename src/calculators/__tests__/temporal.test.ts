@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { calculateTemporalBadges } from '../temporal.js';
-import { emptyProfile, nightOwlProfile } from '../../__tests__/mocks/profiles.js';
+import { emptyProfile, nightOwlProfile, weekendWarriorProfile, marathonerProfile, sprinterProfile } from '../../__tests__/mocks/profiles.js';
 
 describe('Temporal Badges', () => {
   it('should award Night Owl for 30%+ late night commits', () => {
     const result = calculateTemporalBadges(nightOwlProfile);
     expect(result.nightOwl).toBe(true);
     expect(result.earlyBird).toBe(false);
+    expect(result.weekendWarrior).toBe(false);
   });
 
   it('should award Early Bird for early morning consistency', () => {
@@ -28,5 +29,20 @@ describe('Temporal Badges', () => {
     };
     const result = calculateTemporalBadges(earlyBirdProfile);
     expect(result.earlyBird).toBe(true);
+  });
+
+  it('should award Weekend Warrior for weekend focus', () => {
+    const result = calculateTemporalBadges(weekendWarriorProfile);
+    expect(result.weekendWarrior).toBe(true);
+  });
+
+  it('should award Marathoner for 30 day streak', () => {
+    const result = calculateTemporalBadges(marathonerProfile);
+    expect(result.marathoner).toBe(true);
+  });
+
+  it('should award Sprinter for 50+ contributions in one day', () => {
+    const result = calculateTemporalBadges(sprinterProfile);
+    expect(result.sprinter).toBe(true);
   });
 });

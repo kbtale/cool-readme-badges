@@ -22,6 +22,12 @@ export interface RepositoryStats {
   languages: LanguageStats[];
 }
 
+export interface DailyContribution {
+  date: string;
+  count: number;
+  weekday: number;
+}
+
 export interface DeveloperProfile {
   username: string;
   totalCommits: number;
@@ -38,6 +44,7 @@ export interface DeveloperProfile {
   following: number;
   location: string | null;
   commitTimes: string[];
+  dailyContributions: DailyContribution[];
   latestIssues: { createdAt: string; closedAt: string | null }[];
   contributedRepos: { isFork: boolean; owner: string; collaboratorCount: number }[];
   languages: Record<string, { size: number; color: string }>;
@@ -56,6 +63,13 @@ export interface RawGithubResponse {
       totalPullRequestReviewContributions: number;
       contributionCalendar: {
         totalContributions: number;
+        weeks: Array<{
+          contributionDays: Array<{
+            contributionCount: number;
+            weekday: number;
+            date: string;
+          }>;
+        }>;
       };
       commitContributionsByRepository: Array<{
         contributions: {
