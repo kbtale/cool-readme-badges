@@ -1,4 +1,4 @@
-import type { RawGithubResponse, DeveloperProfile, RepositoryStats, LanguageStats } from './types.js';
+import type { RawGithubResponse, DeveloperProfile, RepositoryStats, LanguageStats, DailyContribution } from './types.js';
 
 export function parseGithubData(username: string, rawData: RawGithubResponse): DeveloperProfile {
   const { user } = rawData;
@@ -6,6 +6,14 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
 
   const commitTimes: string[] = contributionsCollection.commitContributionsByRepository.flatMap(
     (repo) => repo.contributions.nodes.map((node) => node.occurredAt)
+  );
+
+  const dailyContributions: DailyContribution[] = contributionsCollection.contributionCalendar.weeks.flatMap(
+    (week) => week.contributionDays.map((day) => ({
+      date: day.date,
+      count: day.contributionCount,
+      weekday: day.weekday,
+    }))
   );
 
   const normalizedRepos: RepositoryStats[] = repositories.nodes.map((repo) => {
@@ -65,6 +73,7 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
     following: following.totalCount,
     location,
     commitTimes,
+    dailyContributions,
     latestIssues: user.latestIssues.nodes.map((node) => ({
       createdAt: node.createdAt,
       closedAt: node.closedAt,

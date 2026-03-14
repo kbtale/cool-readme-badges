@@ -16,6 +16,7 @@ export const emptyProfile: DeveloperProfile = {
   following: 0,
   location: null,
   commitTimes: [],
+  dailyContributions: [],
   latestIssues: [],
   contributedRepos: [],
   languages: {},
@@ -81,5 +82,32 @@ export const trendSetterProfile: DeveloperProfile = {
       collaboratorCount: 1,
       languages: [],
     },
+  ],
+};
+
+export const weekendWarriorProfile: DeveloperProfile = {
+  ...emptyProfile,
+  totalCommits: 4,
+  commitTimes: [
+    '2024-01-06T12:00:00Z', // Saturday
+    '2024-01-06T13:00:00Z', // Saturday
+    '2024-01-07T12:00:00Z', // Sunday
+    '2024-01-01T12:00:00Z', // Monday
+  ], // 75% on weekends
+};
+
+export const marathonerProfile: DeveloperProfile = {
+  ...emptyProfile,
+  dailyContributions: Array.from({ length: 30 }, (_, i) => ({
+    date: `2024-01-${i + 1}`,
+    count: 1,
+    weekday: 1,
+  })),
+};
+
+export const sprinterProfile: DeveloperProfile = {
+  ...emptyProfile,
+  dailyContributions: [
+    { date: '2024-01-01', count: 51, weekday: 1 },
   ],
 };
