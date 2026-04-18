@@ -1,0 +1,31 @@
+name: 'Cool Readme Badges'
+description: 'Generate automated achievement badges for your GitHub profile README.'
+author: 'kbtale'
+inputs:
+  github_token:
+    description: 'The GitHub token to fetch profile data (secrets.GITHUB_TOKEN)'
+    required: true
+  username:
+    description: 'The GitHub username to fetch data for (defaults to the repository owner)'
+    required: false
+    default: ${{ github.repository_owner }}
+  output_path:
+    description: 'The path where the generated badges.svg will be saved'
+    required: false
+    default: 'badges.svg'
+  theme:
+    description: 'The visual theme for the badges (e.g., dark, light, high-contrast, etc.)'
+    required: false
+    default: 'dark'
+  theme_config:
+    description: 'Optional JSON string for custom hex colors (e.g. {"bgColor": "#000000"})'
+    required: false
+outputs:
+  svg_path:
+    description: 'The final path of the generated SVG file'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+branding:
+  icon: 'award'
+  color: 'blue'
