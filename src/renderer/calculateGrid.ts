@@ -1,4 +1,4 @@
-import { badgeAssets, type BadgeAsset } from './assets.js';
+import { badgeRegistry, type BadgeMetadata } from './badgeInfo.js';
 
 export interface GridConfig {
   badgeWidth: number;
@@ -17,7 +17,7 @@ const DEFAULT_CONFIG: GridConfig = {
 export interface PositionedBadge {
   x: number;
   y: number;
-  asset: BadgeAsset;
+  id: string;
 }
 
 export interface GridCalculationResult {
@@ -36,15 +36,13 @@ export function calculateGrid(
   const { badgeWidth, badgeHeight, gap, columns } = config;
 
   // Filter out invalid keys
-  const validBadges = earnedBadgeKeys
-    .map(key => badgeAssets[key])
-    .filter((asset): asset is BadgeAsset => asset !== undefined);
+  const validBadgeIds = earnedBadgeKeys.filter(key => badgeRegistry[key] !== undefined);
 
-  if (validBadges.length === 0) {
+  if (validBadgeIds.length === 0) {
     return { width: 0, height: 0, badges: [] };
   }
 
-  const totalCount = validBadges.length;
+  const totalCount = validBadgeIds.length;
   const numRows = Math.ceil(totalCount / columns);
   const maxColsInAnyRow = Math.min(totalCount, columns);
 
@@ -52,7 +50,7 @@ export function calculateGrid(
   const totalWidth = (maxColsInAnyRow * badgeWidth) + (Math.max(0, maxColsInAnyRow - 1) * gap);
   const totalHeight = (numRows * badgeHeight) + (Math.max(0, numRows - 1) * gap);
 
-  const positionedBadges: PositionedBadge[] = validBadges.map((asset, index) => {
+  const positionedBadges: PositionedBadge[] = validBadgeIds.map((id, index) => {
     const rowIndex = Math.floor(index / columns);
     const colIndex = index % columns;
     
@@ -71,7 +69,7 @@ export function calculateGrid(
       x += offset;
     }
 
-    return { x, y, asset };
+    return { x, y, id };
   });
 
   return {

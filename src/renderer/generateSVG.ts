@@ -1,4 +1,6 @@
 import { calculateGrid, type GridConfig } from './calculateGrid.js';
+import { badgeRegistry } from './badgeInfo.js';
+import { themeRegistry } from './themes/index.js';
 
 export interface ThemeConfig {
   bgColor?: string;
@@ -6,30 +8,32 @@ export interface ThemeConfig {
   accentColor?: string;
 }
 
-const DEFAULT_THEME: Record<string, ThemeConfig> = {
+const DEFAULT_COLORS: Record<string, ThemeConfig> = {
   dark: { bgColor: '#0d1117', textColor: '#c9d1d9', accentColor: '#58a6ff' },
   light: { bgColor: '#ffffff', textColor: '#24292f', accentColor: '#0969da' },
 };
 
 /**
  * Main application renderer. Translates the array of earned badge IDs
- * into an SVG string with accessibility tags and dynamic theming.
+ * into an SVG string using a folder-based theme system.
  */
 export function generateSVG(
   earnedBadgeKeys: string[],
-  themeName: string = 'dark',
+  themeName: string = 'basic',
+  colorMode: string = 'dark',
   customTheme?: ThemeConfig,
   gridConfig?: GridConfig
 ): string {
   const matrix = calculateGrid(earnedBadgeKeys, gridConfig);
-  const theme = { ...(DEFAULT_THEME[themeName] || DEFAULT_THEME.dark), ...customTheme };
+  const theme = themeRegistry[themeName] || themeRegistry['basic']!;
+  const colors = { ...(DEFAULT_COLORS[colorMode] || DEFAULT_COLORS.dark), ...customTheme };
 
   const styleBlock = `
   <style>
     :root {
-      --badge-bg: ${theme.bgColor};
-      --badge-text: ${theme.textColor};
-      --badge-accent: ${theme.accentColor};
+      --badge-bg: ${colors.bgColor};
+      --badge-text: ${colors.textColor};
+      --badge-accent: ${colors.accentColor};
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     }
     .badge-label { fill: var(--badge-text); font-family: var(--font-family); font-size: 14px; font-weight: 600; }
@@ -44,17 +48,21 @@ export function generateSVG(
   }
 
   const groupStrings = matrix.badges.map((b) => {
-    // Escape quotes to prevent broken XML from bad SVG payloads
-    const safeTitle = b.asset.title.replace(/"/g, '&quot;');
-    const safeDesc = b.asset.description.replace(/"/g, '&quot;');
-    const ariaLabels = `title-${b.asset.id} desc-${b.asset.id}`;
-    const graphic = b.asset.variants[themeName] || b.asset.variants['dark'] || '';
+    const meta = badgeRegistry[b.id];
+    const visual = theme.badges[b.id];
+
+    if (!meta || !visual) return '';
+
+    // Escape quotes for accessibility tags
+    const safeTitle = meta.title.replace(/"/g, '&quot;');
+    const safeDesc = meta.description.replace(/"/g, '&quot;');
+    const ariaLabels = `title-${meta.id} desc-${meta.id}`;
 
     return `
     <g transform="translate(${b.x}, ${b.y})" role="img" aria-labelledby="${ariaLabels}">
-      <title id="title-${b.asset.id}">${safeTitle}</title>
-      <desc id="desc-${b.asset.id}">${safeDesc}</desc>
-      ${graphic}
+      <title id="title-${meta.id}">${safeTitle}</title>
+      <desc id="desc-${meta.id}">${safeDesc}</desc>
+      ${visual.graphic}
     </g>`;
   });
 
