@@ -2,6 +2,8 @@
 ROADMAP.md
 node_modules/
 jspm_packages/
+.agents/
+skills-lock.json
 
 # Optional npm cache directory
 .npm
