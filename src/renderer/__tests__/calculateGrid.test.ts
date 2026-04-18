@@ -9,39 +9,43 @@ describe('Grid Calculation Engine', () => {
     expect(result.badges.length).toBe(0);
   });
 
-  it('calculates layout for exactly 6 badges (1 full row)', () => {
-    const keys = ['nightOwl', 'earlyBird', 'weekendWarrior', 'marathoner', 'sprinter', 'polyglot'];
+  it('calculates layout for exactly 4 badges (1 full row)', () => {
+    const keys = ['nightOwl', 'earlyBird', 'weekendWarrior', 'marathoner'];
     const result = calculateGrid(keys);
     
-    expect(result.badges.length).toBe(6);
+    expect(result.badges.length).toBe(4);
     
     // First badge (col 0, row 0)
     expect(result.badges[0]!.x).toBe(0);
     expect(result.badges[0]!.y).toBe(0);
 
-    // Sixth badge (col 5, row 0) => 5 * (200 + 20) = 1100
-    expect(result.badges[5]!.x).toBe(1100);
-    expect(result.badges[5]!.y).toBe(0);
+    // Fourth badge (col 3, row 0) => 3 * (200 + 20) = 660
+    expect(result.badges[3]!.x).toBe(660);
+    expect(result.badges[3]!.y).toBe(0);
 
-    // Width: (6 * 200) + (5 * 20) = 1200 + 100 = 1300
+    // Width: (4 * 200) + (3 * 20) = 860
     // Height: 100
-    expect(result.width).toBe(1300);
+    expect(result.width).toBe(860);
     expect(result.height).toBe(100);
   });
 
-  it('drops the 7th badge to the second row (left aligned)', () => {
-    const keys = ['nightOwl', 'earlyBird', 'weekendWarrior', 'marathoner', 'sprinter', 'polyglot', 'omniglot'];
+  it('centers the second row if it is incomplete (e.g., 6 items total)', () => {
+    const keys = ['nightOwl', 'earlyBird', 'weekendWarrior', 'marathoner', 'sprinter', 'polyglot'];
     const result = calculateGrid(keys);
     
-    expect(result.badges.length).toBe(7);
+    expect(result.badges.length).toBe(6);
     
-    // Seventh badge (col 0, row 1) => x=0, y=1 * (100 + 20) = 120
-    expect(result.badges[6]!.x).toBe(0);
-    expect(result.badges[6]!.y).toBe(120);
+    // Row 2 begins at index 4
+    // Items in last row: 2. Row width: 2*200 + 20 = 420
+    // Total width: 860. Offset: (860 - 420) / 2 = 220
+    
+    // Fifth badge (col 0, row 1) => x = 0 + 220, y = 120
+    expect(result.badges[4]!.x).toBe(220);
+    expect(result.badges[4]!.y).toBe(120);
 
-    // Dimensions: Width remains 1300
-    // Height: (2 * 100) + (1 * 20) = 220
-    expect(result.width).toBe(1300);
+    // Dimensions: Width 860
+    // Height: (2 * 100) + 20 = 220
+    expect(result.width).toBe(860);
     expect(result.height).toBe(220);
   });
 
@@ -50,6 +54,6 @@ describe('Grid Calculation Engine', () => {
     const result = calculateGrid(keys);
     
     expect(result.badges.length).toBe(1);
-    expect(result.badges[0]!.asset.id).toBe('nightOwl');
+    expect(result.badges[0]!.id).toBe('nightOwl');
   });
 });

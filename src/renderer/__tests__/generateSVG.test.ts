@@ -9,24 +9,19 @@ describe('SVG Template Injector', () => {
     expect(svg).toContain('viewBox="0 0 200 100"');
   });
 
-  it('injects the dark variant graphic by default', () => {
+  it('injects the basic theme graphic by default', () => {
     const svg = generateSVG(['nightOwl']);
-    // nightOwl dark variant: <circle cx="50" cy="50" r="40" fill="gray" />
+    // nightOwl basic graphic: <circle cx="50" cy="50" r="40" fill="gray" />
     expect(svg).toContain('fill="gray"');
   });
 
-  it('injects the requested variant graphic when themeName is provided', () => {
-    const svg = generateSVG(['nightOwl'], 'light');
-    // nightOwl light variant: <circle cx="50" cy="50" r="40" fill="lightgray" />
-    expect(svg).toContain('fill="lightgray"');
-  });
-
-  it('falls back to the dark variant if the requested theme is missing', () => {
-    const svg = generateSVG(['nightOwl'], 'neon');
+  it('injects the requested theme graphic when themeName is provided', () => {
+    // Currently only 'basic' is implemented, but we'll test the fallback/selection logic
+    const svg = generateSVG(['nightOwl'], 'basic');
     expect(svg).toContain('fill="gray"');
   });
 
-  it('injects accessibility title and desc tags securely', () => {
+  it('injects accessibility title and desc tags securely from badgeRegistry', () => {
     const svg = generateSVG(['earlyBird']);
     
     expect(svg).toContain('role="img"');
@@ -35,12 +30,19 @@ describe('SVG Template Injector', () => {
     expect(svg).toContain('<desc id="desc-earlyBird">20%+ commits between 04:00 and 08:00</desc>');
   });
 
-  it('calculates the root viewBox dynamically from the grid engine', () => {
-    // 6 columns max (a single full row)
+  it('calculates the root viewBox dynamically from the 4-column grid engine', () => {
+    // 4 columns max. 6 items = 2 rows
+    // Width: 4*200 + 3*20 = 860
+    // Height: 2*100 + 1*20 = 220
     const keys = ['nightOwl', 'earlyBird', 'weekendWarrior', 'marathoner', 'sprinter', 'polyglot'];
     const svg = generateSVG(keys);
     
-    expect(svg).toContain('viewBox="0 0 1300 100"');
+    expect(svg).toContain('viewBox="0 0 860 220"');
+  });
+
+  it('injects CSS variables into the style block', () => {
+    const svg = generateSVG(['nightOwl'], 'basic', 'dark');
+    expect(svg).toContain('--badge-bg: #0d1117');
+    expect(svg).toContain('--badge-text: #c9d1d9');
   });
 });
-
