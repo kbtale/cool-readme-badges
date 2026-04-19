@@ -7,7 +7,7 @@ import { calculateAllBadges } from '../calculators/index.js';
 import { generateSVG } from '../renderer/index.js';
 import { commitAndPush } from './git.js';
 
-async function run() {
+export async function run() {
   try {
     // get inputs
     const token = core.getInput('github_token', { required: true });
@@ -45,7 +45,11 @@ async function run() {
 
     core.info(`Successfully saved badges to ${absolutePath}`);
 
-    await commitAndPush(outputPath, 'feat(badges): update badges.svg');
+    if (process.env.DRY_RUN === 'true') {
+      core.info('DRY_RUN detected. Skipping git commit and push.');
+    } else {
+      await commitAndPush(outputPath, 'feat(badges): update badges.svg');
+    }
 
     core.setOutput('svg_path', absolutePath);
 
@@ -58,4 +62,7 @@ async function run() {
   }
 }
 
-run();
+// Only run if this file is executed directly (not imported)
+if (process.argv[1]?.endsWith('index.ts') || process.argv[1]?.endsWith('index.js')) {
+  run();
+}
