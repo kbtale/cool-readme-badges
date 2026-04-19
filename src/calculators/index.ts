@@ -31,7 +31,6 @@ export function calculateAllBadges(profile: DeveloperProfile): string[] {
   if (language.polyglot) unlocked.push('polyglot');
   if (language.omniglot) unlocked.push('omniglot');
   if (language.wordsmith) unlocked.push('wordsmith');
-  if (language.codeDiet) unlocked.push('codeDiet');
 
   // Collaboration
   if (collaboration.mergeMaster) unlocked.push('mergeMaster');
@@ -40,6 +39,7 @@ export function calculateAllBadges(profile: DeveloperProfile): string[] {
   if (collaboration.necromancer) unlocked.push('necromancer');
   if (collaboration.teamPlayer) unlocked.push('teamPlayer');
   if (collaboration.explorer) unlocked.push('explorer');
+  if (collaboration.theCleaner) unlocked.push('theCleaner');
 
   // Milestones
   if (milestones.starMagnet) unlocked.push('starMagnet');

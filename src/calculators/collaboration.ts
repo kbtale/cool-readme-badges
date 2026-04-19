@@ -7,6 +7,7 @@ export interface CollaborationBadgeResult {
   necromancer: boolean;
   teamPlayer: boolean;
   explorer: boolean;
+  theCleaner: boolean;
 }
 
 export function calculateCollaborationBadges(profile: DeveloperProfile): CollaborationBadgeResult {
@@ -14,6 +15,8 @@ export function calculateCollaborationBadges(profile: DeveloperProfile): Collabo
     totalMergedPRs,
     totalReviews,
     totalClosedIssues,
+    totalIssues,
+    totalIssueContributions,
     latestIssues,
     contributedRepos,
   } = profile;
@@ -59,6 +62,9 @@ export function calculateCollaborationBadges(profile: DeveloperProfile): Collabo
 
   const isExplorer = uniqueExternalRepos.size >= 10;
 
+  // The Cleaner: Closed/helped more than you personally opened
+  const isTheCleaner = totalIssueContributions > totalIssues;
+
   return {
     mergeMaster: isMergeMaster,
     hawkEye: isHawkEye,
@@ -66,5 +72,6 @@ export function calculateCollaborationBadges(profile: DeveloperProfile): Collabo
     necromancer: isNecromancer,
     teamPlayer: isTeamPlayer,
     explorer: isExplorer,
+    theCleaner: isTheCleaner,
   };
 }

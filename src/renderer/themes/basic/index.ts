@@ -12,12 +12,12 @@ export const basicTheme: BadgeTheme = {
     polyglot: { graphic: '<circle cx="50" cy="50" r="40" fill="cyan" />' },
     omniglot: { graphic: '<circle cx="50" cy="50" r="40" fill="magenta" />' },
     wordsmith: { graphic: '<circle cx="50" cy="50" r="40" fill="lightblue" />' },
-    codeDiet: { graphic: '<circle cx="50" cy="50" r="40" fill="green" />' },
     
     mergeMaster: { graphic: '<circle cx="50" cy="50" r="40" fill="purple" />' },
     hawkEye: { graphic: '<circle cx="50" cy="50" r="40" fill="teal" />' },
     bugHunter: { graphic: '<circle cx="50" cy="50" r="40" fill="brown" />' },
-    necromancer: { graphic: '<circle cx="50" cy="50" r="40" fill="black" />' },
+    theCleaner: { graphic: '<circle cx="50" cy="50" r="40" fill="gray" />' },
+    necromancer: { graphic: '<circle cx="50" cy="50" r="40" fill="indigo" />' },
     teamPlayer: { graphic: '<circle cx="50" cy="50" r="40" fill="navy" />' },
     explorer: { graphic: '<circle cx="50" cy="50" r="40" fill="olive" />' },
     

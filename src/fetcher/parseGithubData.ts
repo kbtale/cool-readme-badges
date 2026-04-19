@@ -65,6 +65,7 @@ export function parseGithubData(username: string, rawData: RawGithubResponse): D
     totalPRs: pullRequests.totalCount || 0,
     totalMergedPRs: user.mergedPullRequests?.totalCount || 0,
     totalIssues: issues.totalCount || 0,
+    totalIssueContributions: contributionsCollection.totalIssueContributions || 0,
     totalClosedIssues: user.closedIssues?.totalCount || 0,
     totalReviews: contributionsCollection.totalPullRequestReviewContributions || 0,
     totalContributions: contributionsCollection.contributionCalendar.totalContributions || 0,

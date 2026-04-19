@@ -34,6 +34,7 @@ export interface DeveloperProfile {
   totalPRs: number;
   totalMergedPRs: number;
   totalIssues: number;
+  totalIssueContributions: number;
   totalClosedIssues: number;
   totalReviews: number;
   totalContributions: number;

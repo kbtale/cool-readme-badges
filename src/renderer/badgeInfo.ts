@@ -14,12 +14,12 @@ export const badgeRegistry: Record<string, BadgeMetadata> = {
   polyglot: { id: 'polyglot', title: 'Polyglot', description: 'Used 5+ languages >1%' },
   omniglot: { id: 'omniglot', title: 'Omniglot', description: 'Used 10+ languages >1%' },
   wordsmith: { id: 'wordsmith', title: 'Wordsmith', description: 'Over 25% of code is Markdown/Text' },
-  codeDiet: { id: 'codeDiet', title: 'Code Diet', description: 'Popular repo under 50KB' },
   
   mergeMaster: { id: 'mergeMaster', title: 'Merge Master', description: '50+ merged PRs' },
   hawkEye: { id: 'hawkEye', title: 'Hawk Eye', description: '50+ PR Reviews' },
-  bugHunter: { id: 'bugHunter', title: 'Bug Hunter', description: '50+ closed issues' },
-  necromancer: { id: 'necromancer', title: 'Necromancer', description: 'Resolved 365+ day old issue' },
+  bugHunter: { id: 'bugHunter', title: 'Bug Hunter', description: '50+ total closed issues' },
+  theCleaner: { id: 'theCleaner', title: 'The Cleaner', description: 'Closed/Helped more than opened' },
+  necromancer: { id: 'necromancer', title: 'Necromancer', description: 'Fixed an issue after 365+ days' },
   teamPlayer: { id: 'teamPlayer', title: 'Team Player', description: 'Contributed to repo with 10+ active members' },
   explorer: { id: 'explorer', title: 'Explorer', description: 'Contributed to 10+ unique external repos' },
   

@@ -4,7 +4,6 @@ export interface LanguageBadgeResult {
   polyglot: boolean;
   omniglot: boolean;
   wordsmith: boolean;
-  codeDiet: boolean;
 }
 
 export function calculateLanguageBadges(profile: DeveloperProfile): LanguageBadgeResult {
@@ -53,6 +52,5 @@ export function calculateLanguageBadges(profile: DeveloperProfile): LanguageBadg
     polyglot: significantLanguagesCount >= 5,
     omniglot: significantLanguagesCount >= 10,
     wordsmith: isWordsmith,
-    codeDiet: isCodeDiet,
   };
 }
