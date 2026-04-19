@@ -5,6 +5,7 @@ import * as path from 'node:path';
 import { fetchUserData, parseGithubData } from '../fetcher/index.js';
 import { calculateAllBadges } from '../calculators/index.js';
 import { generateSVG } from '../renderer/index.js';
+import { commitAndPush } from './git.js';
 
 async function run() {
   try {
@@ -43,6 +44,9 @@ async function run() {
     fs.writeFileSync(absolutePath, svg, 'utf-8');
 
     core.info(`Successfully saved badges to ${absolutePath}`);
+
+    await commitAndPush(outputPath, 'feat(badges): update badges.svg');
+
     core.setOutput('svg_path', absolutePath);
 
   } catch (error) {
